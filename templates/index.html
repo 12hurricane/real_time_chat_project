@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="dashboard">
+    <header class="dashboard-header">
+        <h1>Dashboard</h1>
+        <p>Join a room or create a new one.</p>
+    </header>
+
+    <div class="create-room">
+        <form method="post" class="room-form">
+            {% csrf_token %}
+            <input type="text" name="room_name" placeholder="Enter Room Name" required>
+            <button type="submit" class="btn btn-primary">Create / Join Room</button>
+        </form>
+    </div>
+
+    <div class="room-list">
+        <h3>Active Rooms</h3>
+        {% if rooms %}
+        <div class="grid">
+            {% for room in rooms %}
+            <a href="{% url 'room' room.name %}" class="card room-card">
+                <h4>{{ room.name }}</h4>
+                <p>Join Chat &rarr;</p>
+            </a>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="empty-state">No rooms active. Create one above!</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

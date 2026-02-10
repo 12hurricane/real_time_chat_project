@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+        <h2>{{ type }}</h2>
+        <form method="post">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+            <div class="alert alert-danger" style="color: #ef4444; margin-bottom: 1rem; text-align: center;">
+                {% for error in form.non_field_errors %}
+                {{ error }}
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            {% for field in form %}
+            <div class="form-group">
+                {{ field }}
+                {% if field.errors %}
+                <div class="text-danger" style="color: #ef4444; font-size: 0.8rem; margin-top: 0.25rem;">
+                    {{ field.errors.0 }}
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+
+            <button type="submit" class="btn btn-primary full-width">{{ type }}</button>
+        </form>
+        <div class="auth-footer">
+            {% if type == 'Login' %}
+            <p>Don't have an account? <a href="{% url 'signup' %}">Sign up</a></p>
+            {% else %}
+            <p>Already have an account? <a href="{% url 'login' %}">Login</a></p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="chat-container">
+    <div class="chat-header">
+        <h2>Room: <span id="room-name-display">{{ room_name }}</span></h2>
+        <div class="header-actions">
+            <div class="notification-control">
+                <label class="switch" title="Toggle Notifications">
+                    <input type="checkbox" id="notification-checkbox">
+                    <span class="slider"></span>
+                </label>
+                <span class="notification-label">Notifs</span>
+            </div>
+            <span class="status-indicator connected">Connected</span>
+        </div>
+    </div>
+
+    <div id="chat-log" class="chat-log">
+        {% for message in messages %}
+        <div class="message-wrapper {% if message.user == user %}sent{% else %}received{% endif %}">
+            <div class="message-bubble">
+                <small class="message-user">{{ message.user.username }}</small>
+                <p>{{ message.decrypted_content }}</p>
+                <span class="message-time">{{ message.timestamp|date:"H:i" }}</span>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="typing-indicator" id="typing-indicator"></div>
+
+    <div class="chat-input-area">
+        <input id="chat-message-input" type="text" placeholder="Type your message...">
+        <button id="chat-message-submit" class="btn btn-primary">Send</button>
+    </div>
+</div>
+
+{{ room_name|json_script:"room-name" }}
+{{ request.user.username|json_script:"user-username" }}
+
+<script src="/static/js/chat_socket.js"></script>
+{% endblock %}
